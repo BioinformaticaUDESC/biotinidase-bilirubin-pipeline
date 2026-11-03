@@ -29,9 +29,47 @@ Software versions documented in the manuscript include AutoDock Vina 1.2.5, GNIN
 
 ## Repository status
 
-The study overview is available in this initial repository. Original execution scripts, configuration files, and reproducibility instructions are pending upload and verification. No executable pipeline release or simulation dataset has been deposited here yet.
+The original post-processing package BTD_PCA_Clustering_FEL_Z8 is available as a ZIP archive and as individual source files. It covers shared-basis C-alpha PCA, Ward hierarchical clustering, descriptive occupancy-based FEL projections, and RMSF sensitivity analysis excluding terminal residues.
+
+Docking preparation scripts, MD production configurations, the upstream trajectory-preparation scripts, and simulation datasets have not yet been deposited. This is a partial source deposit, rather than a complete end-to-end reproduction package.
 
 Reported observations are conditional on one trajectory per condition and do not establish substrate competition or enzymatic inhibition.
+
+## Available files
+
+| File | Purpose |
+| --- | --- |
+| `BTD_PCA_Clustering_FEL_Z8.zip` | Archived analysis package |
+| `analyze_pca_fel.py` | Shared PCA, hierarchical clustering, representative frames, and exploratory FEL projections |
+| `rmsf_core_qc.py` | RMSF comparison with terminal-residue sensitivity analysis |
+| `run_on_Z8.sh` | GROMACS C-alpha extraction and analysis launcher |
+| `README.txt` | Original package instructions |
+
+The original package includes exploratory FEL plots; these are descriptive occupancy projections and should not be interpreted as converged binding free energies.
+
+## Required inputs and execution
+
+The launcher expects prepared trajectories for the six systems listed above, with the following project layout:
+
+```text
+PROJECT_ROOT/07_gromacs_md/systems/SYSTEM/md_200ns_rep01.tpr
+PROJECT_ROOT/08_analysis/mdtraj_50_200ns/prepared/SYSTEM/aligned_50_200ns.xtc
+PROJECT_ROOT/08_analysis/mdtraj_50_200ns/prepared/SYSTEM/groups.ndx
+PROJECT_ROOT/08_analysis/mdtraj_50_200ns/results/SYSTEM_RMSF_CA_50_200ns.xvg
+```
+
+The original launcher assumes existing Conda environments named `gromacs_cpu` and `btd_interactions`. Python dependencies are MDTraj, NumPy, pandas, SciPy, scikit-learn, and Matplotlib. GROMACS must be available as `gmx` before launching.
+
+From the directory containing the three source scripts:
+
+```bash
+conda activate gromacs_cpu
+bash run_on_Z8.sh /path/to/PROJECT_ROOT
+```
+
+Outputs are written under `08_analysis/mdtraj_50_200ns/results/PCA_clustering_FEL_English/` and `08_analysis/mdtraj_50_200ns/results/RMSF_core_QC_English/`.
+
+Syntax checks passed for the archived Python and shell scripts. No trajectory-based execution was performed as part of this repository deposit because the required simulation inputs are not included.
 
 ## Authors
 
